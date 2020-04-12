@@ -18,11 +18,11 @@ trait DiffableModel[D <: DiffModel[_], M <: DiffableModel[D, _]] {
 
   /**
     *
-    * @param newerModel The other DiffableModel with which diff will be figured out.
-    *              Priority is given to the values of `newerModel` and not `this`.
+    * @param olderModel The other DiffableModel with which diff will be figured out.
+    *              Priority is given to the values of `this` and not `otherModel`.
     *
     * @return A ModelDiff object containing the diffs of the two objects.
     */
-  def diff(newerModel: M): D
+  def diff(olderModel: M): D
 }
 

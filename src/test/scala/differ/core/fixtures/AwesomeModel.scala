@@ -2,7 +2,20 @@ package differ.core.fixtures
 
 import differ.core._
 
+/**
+  * Here you can check some sample models which uses the traits DiffModel and DiffableModel
+  *
+  * These models then eventually will have operations to have diffs and build from diffs.
+  *
+  * You can even build a sequence of Diffs with
+  *
+  * val diff: AwesomeModelDiffs = diffs.foldLeft(AwesomeModel())(_ |> _)
+  *
+  */
 
+/**
+  * This is a test fixture model. This has a corresponding DiffModel
+  */
 case class AwesomeModel(field1: String, field2: Int, field3: AwesomeNestedModel)
   extends DiffableModel[AwesomeModelDiff, AwesomeModel] {
 
@@ -12,21 +25,25 @@ case class AwesomeModel(field1: String, field2: Int, field3: AwesomeNestedModel)
     field3 = this.field3.applyDiff(diff.field3)
   )
 
-  override def diff(newerModel: AwesomeModel): AwesomeModelDiff = AwesomeModelDiff(
-    field1 = DiffOption.build(this.field1, newerModel.field1),
-    field2 = DiffOption.build(this.field2, newerModel.field2),
-    field3 = this.field3.diff(newerModel.field3)
+  override def diff(olderModel: AwesomeModel): AwesomeModelDiff = AwesomeModelDiff(
+    field1 = DiffOption.build(olderModel.field1, this.field1),
+    field2 = DiffOption.build(olderModel.field2, this.field2),
+    field3 = this.field3.diff(olderModel.field3)
   )
 }
 
+/**
+  *
+  * This is a test fixture model which is nested in the previous model. This has a corresponding DiffModel
+  */
 case class AwesomeNestedModel(field4: String) extends DiffableModel[AwesomeNestedModelDiff, AwesomeNestedModel] {
 
   override def applyDiff(diff: AwesomeNestedModelDiff): AwesomeNestedModel = AwesomeNestedModel(
     diff.field4.getOrElse(this.field4)
   )
 
-  override def diff(newerModel: AwesomeNestedModel): AwesomeNestedModelDiff = AwesomeNestedModelDiff(
-    DiffOption.build(this.field4, newerModel.field4)
+  override def diff(olderModel: AwesomeNestedModel): AwesomeNestedModelDiff = AwesomeNestedModelDiff(
+    DiffOption.build(olderModel.field4, this.field4)
   )
 }
 
