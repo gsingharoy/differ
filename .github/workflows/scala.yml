@@ -18,4 +18,8 @@ jobs:
       with:
         java-version: 1.8
     - name: Run tests
-      run: sbt test
+      run: sbt clean coverage test coverageReport
+    - name: Push codecov report
+      run: bash <(curl -s https://codecov.io/bash)
+      env:
+        CODECOV_TOKEN: 90e7b42c-cc9d-4daa-8f92-9e4499e6626d
