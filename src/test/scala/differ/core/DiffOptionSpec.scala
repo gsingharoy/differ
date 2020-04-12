@@ -113,4 +113,14 @@ class DiffOptionSpec extends WordSpec with Matchers {
       DiffNone <| DiffNone shouldBe DiffNone
     }
   }
+
+  "DiffOption.build" should {
+    "return DiffNone if the values are same" in {
+      DiffOption.build(3, 3) shouldBe DiffNone
+    }
+
+    "return DiffSome if the values are not same" in {
+      DiffOption.build(3, 4) shouldBe DiffSome(4)
+    }
+  }
 }

@@ -86,6 +86,21 @@ sealed abstract class DiffOption[+A] extends Product with Serializable {
   def <|[B >: A](that: DiffOption[B]): DiffOption[B] = that |> this
 }
 
+object DiffOption{
+
+  /**
+    * Builds a DiffOption from a pair of objects
+    * @param prev
+    * @param next
+    * @tparam B
+    * @return DiffNone if prev and next are the same values
+    *         DiffSome(next) if the values are different
+    *
+    */
+  def build[B](prev: B, next: B): DiffOption[B] =
+    if (prev == next) DiffNone else DiffSome(next)
+}
+
 /**
   * This represents a Diff data type where there is a  delta of a change
   *

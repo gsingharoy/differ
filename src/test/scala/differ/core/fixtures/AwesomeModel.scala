@@ -4,6 +4,20 @@ import differ.core._
 
 
 case class AwesomeModel(field1: String, field2: Int, field3: AwesomeNestedModel)
+  extends DiffableModel[AwesomeModelDiff, AwesomeModel] {
+
+  override def applyDiff(diff: AwesomeModelDiff): AwesomeModel = AwesomeModel(
+    field1 = diff.field1.getOrElse(this.field1),
+    field2 = diff.field2.getOrElse(this.field2),
+    field3 = this.field3.applyDiff(diff.field3)
+  )
+
+  override def diff(newerModel: AwesomeModel): AwesomeModelDiff = AwesomeModelDiff(
+    field1 = DiffOption.build(this.field1, newerModel.field1),
+    field2 = DiffOption.build(this.field2, newerModel.field2),
+    field3 = this.field3.diff(newerModel.field3)
+  )
+}
 
 case class AwesomeNestedModel(field4: String) extends DiffableModel[AwesomeNestedModelDiff, AwesomeNestedModel] {
 
@@ -12,7 +26,7 @@ case class AwesomeNestedModel(field4: String) extends DiffableModel[AwesomeNeste
   )
 
   override def diff(newerModel: AwesomeNestedModel): AwesomeNestedModelDiff = AwesomeNestedModelDiff(
-    if (this.field4 == newerModel.field4) DiffNone else DiffSome(newerModel.field4)
+    DiffOption.build(this.field4, newerModel.field4)
   )
 }
 
