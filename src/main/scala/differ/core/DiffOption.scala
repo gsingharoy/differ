@@ -26,6 +26,7 @@ sealed abstract class DiffOption[+A] extends Product with Serializable {
 
   /**
     * Returns a DiffSome or a DiffHistory with the result containing the computations to the value based on the f
+ *
     * @param f The function to apply
     * @return
     */
@@ -34,6 +35,7 @@ sealed abstract class DiffOption[+A] extends Product with Serializable {
 
   /**
     * Returns the DiffOption's value.
+ *
     *  @note The DiffOption must be nonEmpty.
     */
   @throws[java.util.NoSuchElementException]
@@ -64,7 +66,6 @@ sealed abstract class DiffOption[+A] extends Product with Serializable {
     *     DiffNone |> DiffNone = DiffNone
     *    DiffSome(2) |> DiffHistory(3,4) = DiffSome(3)
     *    DiffHistory(3,4) |> DiffSome(1) = DiffSome(1)
-    *
     *
     * @return The latest value from the two DiffOption values.
     */
@@ -105,6 +106,7 @@ final case class DiffSome[+A](x: A) extends DiffOption[A] {
 case object DiffNone extends DiffOption[Nothing] {
   def isEmpty: Boolean = true
 
+  // This is kept similar to the get method's behaviour of None
   def get: Nothing = throw new NoSuchElementException("DiffNone.get")
 
   @inline def map[B](f: Nothing => B): DiffOption[B] = DiffNone
